@@ -1,0 +1,1867 @@
+### Tuwunel 配置
+###
+### 此文件为生成文件。在仓库中所做的更改/贡献将被
+### 覆盖！
+###
+### 在配置您的服务器之前，您应该重命名此文件。对
+### 文档和默认设置的更改可以在源代码的
+### src/core/config/mod.rs 中贡献。此文件是在构建时生成的。
+###
+### 任何预填充的值都是该配置选项的默认值。
+###
+### 至少，您*必须*编辑所有标记为“YOU NEED TO EDIT THIS”（您需要编辑此项）的配置选项，以适应您的环境。
+###
+### 更多信息，请参阅：
+### https://tuwunel.chat/configuration.html
+
+[global]
+
+# server_name 是此服务器的别名。它被用作
+# 用户和房间 ID/别名的后缀。
+#
+# 有关反向代理和委托的文档，请参阅：
+# https://tuwunel.chat/deploying/generic.html#setting-up-the-reverse-proxy
+#
+# 另请参阅最底部的 `[global.well_known]` 配置部分。
+#
+# 委托示例：
+# - https://matrix.org/.well-known/matrix/server
+# - https://matrix.org/.well-known/matrix/client
+#
+# 您需要编辑此项。在*不*清空数据库的情况下，此项*无法*更改。
+#
+# 示例: "girlboss.ceo"
+#
+#server_name =
+
+# 这是 tuwunel 唯一会保存其数据（包括媒体）的目录。
+# 注意：此目录以前是 "/var/lib/matrix-conduit"。
+#
+#database_path = "/var/lib/tuwunel"
+
+# 用户在注册时，将添加到其显示名称末尾的文本，并在其前面添加一个空格。在 Conduit 中，这是闪电符号表情。
+#
+# 要禁用，请将其设置为 ""（一个空字符串）。
+#
+#new_user_displayname_suffix = "💕"
+
+# tuwunel 将监听的默认地址（IPv4 或 IPv6）。
+#
+# 如果您正在使用 Docker 或容器 NAT 网络设置，则此项必须
+# 是 "0.0.0.0"。
+#
+# 要监听多个地址，请指定一个向量，例如 ["127.0.0.1",
+# "::1"]
+#
+#address = ["127.0.0.1", "::1"]
+
+# tuwunel 将监听的端口。
+#
+# 有关反向代理，请参阅：
+# https://tuwunel.chat/deploying/generic.html#setting-up-the-reverse-proxy
+#
+# 如果您正在使用 Docker，请不要更改此项，您需要将一个
+# 外部端口映射到此端口。
+#
+# 要监听多个端口，请指定一个向量，例如 [8080, 8448]
+#
+#port = 8008
+
+# tuwunel 将监听的 UNIX 套接字。
+#
+# tuwunel 不能同时监听 IP 地址和 UNIX 套接字。如果
+# 监听 UNIX 套接字，您*必须*移除/注释掉 `address` 键。
+#
+# 请记住确保您的反向代理有权访问此套接字
+# 文件，可以通过将您的反向代理添加到 'tuwunel' 组，或者
+# 使用 `unix_socket_perms` 授予全局读/写权限（最低 666）。
+#
+# 示例: "/run/tuwunel/tuwunel.sock"
+#
+#unix_socket_path =
+
+# 创建 UNIX 套接字的默认权限（八进制）。
+#
+#unix_socket_perms = 660
+
+# tuwunel 支持使用 RocksDB 的备份引擎 API 进行在线数据库备份。
+# 要使用此功能，请设置一个 tuwunel 可以写入的数据库备份路径。
+#
+# 更多信息，请参阅：
+# https://tuwunel.chat/maintenance.html#backups
+#
+# 示例: "/opt/tuwunel-db-backups"
+#
+#database_backup_path =
+
+# 如果使用 "database_backup_path"，在删除最旧的备份之前，
+# 要保留/维护的在线 RocksDB 数据库备份的数量。
+#
+#database_backups_to_keep = 1
+
+# 将此设置为任何浮点值，以乘以 tuwunel 的内存中 LRU 缓存，
+# 例如 "auth_chain_cache_capacity"。
+#
+# 如果您有大量闲置内存可用于提高性能，可能会很有用。
+#
+# 如果您的内存不足，减少此值可能是可行的。
+#
+# 默认情况下，像 "auth_chain_cache_capacity" 这样的单个缓存
+# 是根据您的 CPU 核心数进行缩放的。
+#
+#cache_capacity_modifier = 1.0
+
+# 设置此项为任何以兆字节（MB）为单位的浮点值，用于让 tuwunel 告知
+# 数据库引擎，此内存量可用于数据库读取缓存。
+#
+# 如果您有大量闲置内存可用于提高性能，可能会很有用。
+#
+# 与单个 LRU 缓存类似，此值会随您的 CPU 核心数进行缩放。
+#
+# 此默认值为 128.0 + (64.0 * CPU 核心数)。
+#
+#db_cache_capacity_mb = varies by system
+
+# 设置此项为任何以兆字节（MB）为单位的浮点值，用于让 tuwunel 告知
+# 数据库引擎，此内存量可用于数据库写入缓存。
+#
+# 如果您有大量闲置内存可用于提高性能，可能会很有用。
+#
+# 与单个 LRU 缓存类似，此值会随您的 CPU 核心数进行缩放。
+#
+# 此默认值为 48.0 + (4.0 * CPU 核心数)。
+#
+#db_write_buffer_capacity_mb = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#pdu_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#auth_chain_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#shorteventid_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#eventidshort_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#eventid_pdu_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#shortstatekey_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#statekeyshort_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#servernameevent_data_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#stateinfo_cache_capacity = varies by system
+
+# 此项未记录。请贡献其文档。
+#
+#roomid_spacehierarchy_cache_capacity = varies by system
+
+# 客户端可以请求的长轮询同步的最小超时时间。如果小于此值，则请求将被限制为该值。
+#
+#client_sync_timeout_min = 5000
+
+# 如果客户端未在其查询字符串中请求另一个超时时间，则长轮询同步的默认超时时间。
+#
+#client_sync_timeout_default = 30000
+
+# 客户端可以请求的长轮询同步的最大超时时间。如果大于此值，则请求将被限制为该值。
+#
+#client_sync_timeout_max = 90000
+
+# DNS 内存缓存中存储的最大条目数。单个条目的大小可能
+# 有所不同，因此如果过度增加此值，请小心。仅在
+# 使用外部 DNS 缓存时减少此值。请注意，
+# 即使 systemd-resolved 配置为外部缓存，它也*不算*作外部缓存。
+#
+#dns_cache_entries = 32768
+
+# DNS 缓存中条目的最小生存时间（以秒为单位）。对于大多数管理员来说，默认值可能看起来很高；这是出于设计考虑，因为与其他许多服务器进行联邦的特殊负载需要比许多域设置的更高的 TTL。即使使用外部 DNS 缓存，问题也会转移到该缓存，而该缓存不知道其对本应用程序的作用，并可能遵循许多低的 TTL，从而增加其负载。
+#
+#dns_min_ttl = 10800
+
+# DNS 缓存中 NXDOMAIN 条目的最小生存时间（以秒为单位）。
+# 此值对于服务器高效地进行联邦至关重要。
+# NXDOMAIN 被假定不会返回联邦，并被积极地缓存，
+# 而不是不断地重新检查。
+#
+# 默认为 3 天，因为这些*极少*出现误报。
+#
+#dns_min_ttl_nxdomain = 259200
+
+# 在超时或错误后，DNS 命名服务器重试的次数。
+#
+#dns_attempts = 10
+
+# 等待 DNS 查询回复的秒数。请注意，对于某些域，
+# 递归查询可能需要长达几秒钟，因此此值不宜过低，
+# 特别是在较慢的硬件或解析器上。
+#
+#dns_timeout = 10
+
+# 在 DNS 错误时回退到 TCP。如果命名服务器不支持，则设置为 false。
+#
+#dns_tcp_fallback = true
+
+# 启用此项以查询所有命名服务器，直到找到该域。在 hickory_resolver 中称为
+# "trust_negative_responses"。如果第一个命名服务器响应
+# NXDOMAIN 或空的 NOERROR 响应，则可以避免不必要的 DNS 查询。
+#
+#query_all_nameservers = true
+
+# 启用 *仅* 使用 TCP 而非 UDP 查询您指定的命名服务器。
+#
+# 如果您在容器环境中运行 tuwunel，则可能需要启用此配置
+# 选项。有关更多详细信息，请参阅：
+# https://tuwunel.chat/troubleshooting.html#potential-dns-issues-when-using-docker
+#
+#query_over_tcp_only = false
+
+# DNS A/AAAA 记录查找策略
+#
+# 接受以下选项之一的数字：
+# 1 - Ipv4Only (仅查询 A 记录，不查询 AAAA/IPv6)
+#
+# 2 - Ipv6Only (仅查询 AAAA 记录，不查询 A/IPv4)
+#
+# 3 - Ipv4AndIpv6 (并行查询 A 和 AAAA 记录，使用任何
+# 首先返回成功响应的记录)
+#
+# 4 - Ipv6thenIpv4 (查询 AAAA 记录，如果失败则查询 A
+# 记录)
+#
+# 5 - Ipv4thenIpv6 (查询 A 记录，如果失败则查询 AAAA
+# 记录)
+#
+# 如果您没有 IPv6 网络，则为了获得更好的 DNS 性能，
+# 可能适合将其设置为 Ipv4Only (1)，因为即使 AAAA 记录成功，
+# 您也永远不会使用 AAAA 记录内容来代替 A 记录。
+#
+#ip_lookup_strategy = 5
+
+# 域名模式列表，将通过替代路径解析，不使用任何
+# 持久缓存，使用非常小的内存缓存，并且不强制执行 TTL。这
+# 旨在用于需要这些特定属性的内部网络和应用程序服务。
+# 此路径不支持联邦或一般用途。
+#
+# 示例: ["*\.dns\.podman$"]
+#
+#dns_passthru_domains = []
+
+# 是否通过替代路径解析应用服务；如果所有
+# 应用服务都打算匹配，则设置此项优于在 `dns_passthru_domains` 中提供域。
+# 可以避免匹配正则表达式和维护域名列表的开销。
+#
+#dns_passthru_appservices = false
+
+# 启用或禁用 DNS 查询的字母大小写随机化。这是一种安全
+# 缓解措施，通过要求精确匹配问题来防止答案欺骗。
+# 日志中偶尔出现的错误可能导致您来到这里，通常是由于 DNS 过载。
+# 尽管如此，对于确实无法进行此操作的服务器，可以将其设置为 false。
+#
+# 由于用户报告了一些流行的 DNS 缓存可能或可能未被修补，
+# 此项当前默认为 false。它可能会在即将发布的版本中再次
+# 默认为 true。
+#
+#dns_case_randomization = false
+
+# 文件上传的最大请求大小（以字节为单位）。默认为 20MB。
+#
+#max_request_size = 20971520
+
+# 此项未记录。请贡献其文档。
+#
+#max_fetch_prev_events = 192
+
+# 默认/基础连接超时时间（秒）。此项仅用于 URL 预览和
+# 更新/新闻端点检查。
+#
+#request_conn_timeout = 10
+
+# 默认/基础请求超时时间（秒）。等待从另一个服务器接收更多
+# 数据的时间。此项仅用于 URL 预览、
+# 更新/新闻和杂项端点检查。
+#
+#request_timeout = 35
+
+# 默认/基础请求总超时时间（秒）。整个请求的时间限制。
+# 此项设置得非常高，以便在作为后盾的同时，不取消健康的请求。
+# 此项仅用于 URL 预览和更新/新闻端点检查。
+#
+#request_total_timeout = 320
+
+# 默认/基础空闲连接池超时时间（秒）。此项仅用于
+# URL 预览和更新/新闻端点检查。
+#
+#request_idle_timeout = 5
+
+# 默认/基础每个主机的最大空闲连接数。此项仅用于 URL
+# 预览和更新/新闻端点检查。默认为 1，因为通常
+# 可以重复使用相同的开放连接。
+#
+#request_idle_per_host = 1
+
+# 联邦 well-known 解析连接超时时间（秒）。
+#
+#well_known_conn_timeout = 6
+
+# 联邦 HTTP well-known 解析请求超时时间（秒）。
+#
+#well_known_timeout = 10
+
+# 联邦客户端请求超时时间（秒）。您*绝对*希望此值较高，
+# 以考虑*非常*大的房间加入、慢速的 Homeserver、您自己的
+# 资源等。
+#
+#federation_timeout = 300
+
+# 联邦客户端空闲连接池超时时间（秒）。
+#
+#federation_idle_timeout = 25
+
+# 联邦客户端每个主机的最大空闲连接数。默认为 1，因为
+# 通常可以重复使用相同的开放连接。
+#
+#federation_idle_per_host = 1
+
+# 联邦发送者请求超时时间（秒）。远程服务器处理
+# 发送的事务可能需要一段时间。
+#
+#sender_timeout = 180
+
+# 联邦发送者空闲连接池超时时间（秒）。
+#
+#sender_idle_timeout = 180
+
+# 联邦发送者事务重试退避限制（秒）。
+#
+#sender_retry_backoff_limit = 86400
+
+# 应用服务 URL 请求连接超时时间。默认为 35 秒，因为
+# 应用服务通常托管在同一网络内。
+#
+#appservice_timeout = 35
+
+# 应用服务 URL 空闲连接池超时时间（秒）。
+#
+#appservice_idle_timeout = 300
+
+# 通知网关推送器空闲连接池超时时间。
+#
+#pusher_idle_timeout = 15
+
+# 从客户端接收请求的最大时间（秒）。
+#
+#client_receive_timeout = 75
+
+# 处理从客户端接收到的请求的最大时间（秒）。
+#
+#client_request_timeout = 180
+
+# 向客户端传输响应的最大时间（秒）。
+#
+#client_response_timeout = 120
+
+# 客户端请求干净关闭的宽限期（秒）。
+#
+#client_shutdown_timeout = 10
+
+# 联邦请求干净关闭的宽限期（秒）。
+#
+#sender_shutdown_timeout = 5
+
+# 启用注册。如果设置为 false，则此服务器上无法注册任何用户。
+#
+# 如果设置为 true 且未配置 token，则用户可以注册，但
+# 仅在您将以下选项设置为 true 时，才无需任何第二步验证：
+# `yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse`
+#
+# 如果您希望仅通过 token 注册，请配置
+# `registration_token` 或 `registration_token_file`。
+#
+#allow_registration = false
+
+# 启用此设置将向任何人开放注册，没有限制。
+# 这会使您的服务器容易受到滥用。
+#
+#yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = false
+
+# 新用户在创建帐户时必须提供的静态注册 token。
+# 如果未设置且 `allow_registration` 为 true，
+# 您*必须*设置
+# `yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse`
+# 为 true，以允许在没有任何条件的情况下开放注册。
+#
+# 您需要编辑此项或使用 registration_token_file。
+#
+# 示例: "o&^uCtes4HPf0Vu@F20jQeeWE7"
+#
+#registration_token =
+
+# 系统上用于读取额外注册
+# token 的文件路径。如果用空白字符分隔，可以添加多个 token
+#
+# tuwunel 必须能够访问该文件，并且该文件不能为空
+#
+# 示例: "/etc/tuwunel/.reg_token"
+#
+#registration_token_file =
+
+# 控制是否允许加密房间和事件。
+#
+#allow_encryption = true
+
+# 控制是否允许联邦。由于潜在的联邦中断，不建议在安装后禁用此项，
+# 但从技术上讲，这不是一个永久设置。
+#
+#allow_federation = true
+
+# 设置新创建房间的默认 `m.federate` 属性，当
+# 客户端未请求一个时。如果 `allow_federation` 同时设置为 false，
+# 则它总是覆盖客户端请求的 `m.federate` 值为 false。
+#
+# 房间在其创建时就固定了此设置，且永远无法更改；
+# 更改此值只影响新房间。
+#
+#federate_created_rooms = true
+
+# 允许向自身发出联邦请求。
+#
+# 如果联邦请求被发送给自己，这并非预期行为，很可能是一个错误。
+# 这目前主要用于开发目的。
+#
+#federation_loopback = false
+
+# 如果离开房间，则始终代表用户调用 /forget。这是
+# MSC4267 "离开时自动忘记房间"的一部分
+#
+#forget_forced_upon_leave = false
+
+# 将此设置为 true，以要求对通常
+# 未经身份验证的个人资料检索端点 (GET)
+# "/_matrix/client/v3/profile/{userId}" 进行身份验证。
+#
+# 这可以防止个人资料抓取。
+#
+#require_auth_for_profile_requests = false
+
+# 将此设置为 true，以允许您的服务器的公共房间目录进行联邦。
+# 设置为 false 可防止 /publicRooms 蜘蛛，
+# 但会禁止外部用户查看您的服务器的公共房间
+# 目录。如果联邦被完全禁用 (`allow_federation`)，此项
+# 本质上为 false。
+#
+#allow_public_room_directory_over_federation = false
+
+# 将此设置为 true，以允许通过客户端
+# API 查询您的服务器的公共房间目录，而无需客户端身份验证（访问 token）。
+# 设置为 false 可防止 /publicRooms 蜘蛛。
+#
+#allow_public_room_directory_without_auth = false
+
+# 允许房间目录搜索在搜索词以 '!' 开头时，匹配部分 room_id。
+#
+#allow_public_room_search_by_id = true
+
+# 将此设置为 false，以限制通过 ID 搜索房间时的结果，
+# 仅限于通过别名或其他查询找到的房间；
+# 特别是那些列在公共房间目录中的房间。默认情况下，此项设置为
+# true，允许任何可加入的房间匹配。这满足了将 room_id 粘贴到搜索框中
+# 并打算加入时的最小期望原则；许多房间只是选择不公开列表。因此，
+# 为了防止此功能被滥用，在返回任何结果之前，需要知道
+# room_id 的几个字符。
+#
+#allow_unlisted_room_search_by_id = true
+
+# 允许访客/未经身份验证的用户访问 TURN 凭证。
+#
+# 这相当于 Synapse 的 `turn_allow_guests` 配置选项。
+# 这允许任何未经身份验证的用户调用端点
+# `/_matrix/client/v3/voip/turnServer`。
+#
+# 您不太可能需要启用此项，因为所有主要的客户端都支持
+# 此端点的身份验证，并防止潜在的机器人滥用您的 TURN 服务器。
+#
+#turn_allow_guests = false
+
+# 将此设置为 true，以锁定您的服务器的公共房间目录，
+# 并且只允许管理员将房间发布到房间目录。启用此项后，所有用户仍允许取消发布。
+#
+#lockdown_public_room_directory = false
+
+# 将此设置为 true，以允许联邦设备显示名称 / 允许
+# 外部用户查看您的设备显示名称。如果联邦被完全禁用 (`allow_federation`)，
+# 此项本质上为 false。出于隐私原因，最好保持禁用状态。
+#
+#allow_device_name_federation = false
+
+# 配置选项，用于允许或不允许获取我们本地用户的个人资料的传入联邦请求，来自
+# `/_matrix/federation/v1/query/profile`
+#
+# 增加了本地用户的隐私（例如显示名称），但某些
+# 远程用户在尝试邀请您加入私聊或房间时，可能会收到一个错误的“此用户不存在”错误。
+# 也可以防止个人资料蜘蛛。
+#
+# 如果 `allow_federation` 被禁用，此项本质上为 false
+#
+#allow_inbound_profile_lookup_federation_requests = true
+
+# 允许普通用户创建房间。应用服务和管理员始终
+# 允许创建房间。
+#
+#allow_room_creation = true
+
+# 设置为 false，以禁用用户加入或创建 tuwunel 官方
+# 不支持的房间版本。不稳定的房间版本可能
+# 存在有缺陷的规范，或者我们的实现可能不符合规范。
+# 不能保证正确操作，但错误操作可能是可容忍且未被注意到的。
+#
+# tuwunel 官方支持房间版本 6+。tuwunel 对版本 3-5 有
+# 轻微的实验性支持（尽管在实践中运行良好）。
+#
+#allow_unstable_room_versions = true
+
+# 设置为 true 以启用实验性房间版本。
+#
+# 与不稳定的房间版本不同，这些版本要么处于
+# 开发中，要么是原型规范更改，要么以某种方式对服务器的
+# 运行或数据库损坏构成严重风险。此项仅供开发人员使用。
+#
+#allow_experimental_room_versions = false
+
+# tuwunel 创建房间时将使用的默认房间版本。
+#
+# 默认值由规范规定，但可能由开发人员建议选择。
+# 为了防止文档过时，我们不再在此处列出它。
+# 仅建议在您知道自己在做什么时才覆盖此值，
+# 这样做会阻止使用新版本的更新。
+#
+#default_room_version =
+
+# 此项未记录。请贡献其文档。
+#
+#allow_jaeger = false
+
+# 此项未记录。请贡献其文档。
+#
+#jaeger_filter = "info"
+
+# 如果启用了 'perf_measurements' 编译时功能，则启用
+# 使用 tracing_flame 收集跟踪跨度的折叠堆栈跟踪配置文件。
+# 生成的配置文件可以使用 inferno[1]、
+# speedscope[2] 或许多其他工具进行可视化。
+#
+# [1]: https://github.com/jonhoo/inferno
+# [2]: www.speedscope.app
+#
+#tracing_flame = false
+
+# 此项未记录。请贡献其文档。
+#
+#tracing_flame_filter = "info"
+
+# 此项未记录。请贡献其文档。
+#
+#tracing_flame_output_path = "./tracing.folded"
+
+# 示例:
+#
+# - 无代理 (默认):
+#
+#       proxy = "none"
+#
+# - 对于全局代理，请在此文件底部创建该部分：
+#
+#       [global.proxy]
+#       global = { url = "socks5h://localhost:9050" }
+#
+# - 代理某些域：
+#
+#       [global.proxy]
+#       [[global.proxy.by_domain]]
+#       url = "socks5h://localhost:9050"
+#       include = ["*.onion", "matrix.myspecial.onion"]
+#       exclude = ["*.myspecial.onion"]
+#
+# Include (包含) 与 Exclude (排除):
+#
+# - 如果 include 是一个空列表，则假定为 `["*"]`。
+#
+# - 如果一个域同时匹配排除列表和包含列表，则仅当它因比排除规则更具体的规则而被包含时，
+#   才会使用代理。在上面的示例中，代理将用于
+#   `ordinary.onion`、`matrix.myspecial.onion`，但不用于
+#   `hello.myspecial.onion`。
+#
+#proxy = "none"
+
+# 此处列出的服务器将用于收集其他服务器的公钥
+# （公证受信任的密钥服务器）。
+#
+# 目前，tuwunel 不支持传入的批量密钥请求，因此
+# 此列表应仅包含其他 Synapse 服务器。
+#
+# 示例: ["matrix.org", "tchncs.de"]
+#
+#trusted_servers = ["matrix.org"]
+
+# 是否首先查询 trusted_servers 中列出的服务器，还是首先查询
+# 原始服务器。为了获得最佳安全性，建议首先查询原始服务器，
+# 以尽量减少受损受信任服务器的暴露。为了最大化联邦/加入性能，
+# 可以将其设置为 true，但在特定高负载情况下，存在
+# 首先查询受信任服务器的其他选项，应在将其设置为 true 之前进行评估。
+#
+#query_trusted_key_servers_first = false
+
+# 是否在房间加入时，*专门*首先查询 trusted_servers 中列出的服务器。
+# 此选项将受损受信任服务器的暴露限制为仅房间加入。
+# 加入操作需要从许多原始服务器收集密钥，这可能会导致
+# 显著的延迟。因此，此项默认为 true，以减轻
+# 意外的开箱即用延迟。建议偏执的安全主义者或
+# 愿意容忍延迟的人将其设置为 false。请注意，将
+# query_trusted_key_servers_first 设置为 true 会导致此选项
+# 被忽略。
+#
+#query_trusted_key_servers_first_on_join = true
+
+# 仅查询受信任服务器的密钥，*从不*查询原始服务器。此项
+# 旨在用于集群或使用其 trusted_servers 作为
+# 转发代理来缓存和去重请求的自定义部署。
+# 公证服务器默认不充当转发代理，
+# 因此除非您确切知道自己在做什么，否则请勿启用此项。
+#
+#only_query_trusted_key_servers = false
+
+# 每次受信任服务器批量查询中请求的最大密钥数。
+#
+#trusted_server_batch_size = 1024
+
+# tuwunel 的最大日志级别。允许 debug、info、warn 或 error。
+#
+# 另请参阅：
+# https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html#directives
+#
+# **警告**:
+# 对于发布版本，跟踪 crate 配置为仅实现
+# 高于 error 级别的级别，以避免编译
+# 二进制文件中不必要的开销。对于调试版本，此限制不
+# 适用。
+#
+#log = "info"
+
+# 输出带有 ANSI 颜色的日志。
+#
+#log_colors = true
+
+# 将日志格式设置为紧凑模式。
+#
+#log_compact = false
+
+# 配置将随日志输出的 span 事件。
+#
+#log_span_events = "none"
+
+# 配置 TUWUNEL_LOG EnvFilter 是否使用正则表达式匹配值。
+# 请参阅 tracing_subscriber 文档中的 Directives。
+#
+#log_filter_regex = true
+
+# 切换在跟踪日志输出中显示 ThreadId。
+#
+#log_thread_ids = false
+
+# 将日志重定向到标准错误 (stderr)。默认情况下为 stdout。
+# 对于使用我们 systemd 功能的用户，重定向到 stderr
+# 会按需要发生，因此不需要设置此选项。
+# 我们为所有其他需要此重定向的用户提供此选项。
+#
+#log_to_stderr = false
+
+# OpenID token 过期/TTL（以秒为单位）。
+#
+# 这些是主要用于 Matrix 帐户
+# 集成（例如 Element 中的 Vector 集成）的 OpenID token，*而不是* OIDC/OpenID
+# Connect/等的 token。
+#
+#openid_token_ttl = 3600
+
+# 允许现有会话为另一个客户端生成登录 token。
+# 这需要交互式身份验证，但具有安全隐患，
+# 因为恶意客户端可以使用该机制生成多个
+# 会话。
+# 默认启用。
+#
+#login_via_existing_session = true
+
+# 登录 token 过期/TTL（以毫秒为单位）。
+#
+# 这些是用于 m.login.token 端点的短生命周期 token。
+# 此项用于允许现有会话创建新会话。
+# 请参阅 login_via_existing_session。
+#
+#login_token_ttl = 120000
+
+# 访问 token TTL（以秒为单位）。
+#
+# 对于支持刷新 token 的客户端，登录时提供的访问 token
+# 将在此时间后失效，客户端将被软退出，
+# 直到刷新它。
+#
+#access_token_ttl = 604800
+
+# 如果不使用共享密钥 ("turn_secret")，则为客户端提供的静态 TURN 用户名。
+# 建议使用共享密钥而不是静态凭证。
+#
+#turn_username = false
+
+# 如果不使用共享密钥 ("turn_secret")，则为客户端提供的静态 TURN 密码。
+# 建议使用共享密钥而不是静态凭证。
+#
+#turn_password = false
+
+# 要使用的 TURN URI/服务器的向量列表。
+#
+# 将 "example.turn.uri" 替换为您的 TURN 域，例如 coturn
+# 的 "realm" 配置选项。如果通过 TLS 使用 TURN，请将 URI 前缀
+# "turn:" 替换为 "turns:"。
+#
+# 示例: ["turn:example.turn.uri?transport=udp",
+# "turn:example.turn.uri?transport=tcp"]
+#
+#turn_uris = []
+
+# 用于生成 HMAC-SHA1 哈希（作为用户名和密码生成的一部分）的 TURN 密钥。
+#
+# 这更安全，但如果需要，您可以使用传统的静态
+# 用户名/密码凭证。
+#
+#turn_secret = false
+
+# 从指定文件路径读取的 TURN 密钥。
+#
+# 此项优先于 "turn_secret"，如果无效或打开失败，则回退到
+# "turn_secret"。
+#
+# 示例: "/etc/tuwunel/.turn_secret"
+#
+#turn_secret_file =
+
+# TURN TTL（以秒为单位）。
+#
+#turn_ttl = 86400
+
+# 房间 ID 或房间别名的列表/向量，tuwunel 将让新
+# 注册的用户加入这些房间。指定的房间必须是您在服务器上
+# 至少加入过一次的房间，并且必须是公开的。
+#
+# 示例: ["#tuwunel:tuwunel.chat",
+# "!eoIzvAvVwY23LPDay8:tuwunel.chat"]
+#
+#auto_join_rooms = []
+
+# 配置选项，用于自动停用尝试加入以下房间的任何用户的帐户：
+# - 被禁止的房间
+# - 被禁止的房间别名
+# - 具有被禁止服务器名称的房间别名或 ID
+#
+# 如果您所有被禁止的列表都包含有毒房间或
+# 服务器（任何善意用户都不会尝试加入），并且
+# 您希望在没有任何管理员用户干预的情况下自动修复此问题，则此项可能很有用。
+#
+# 这也会让用户离开所有房间。联邦（例如远程
+# 房间邀请）在此处被忽略。
+#
+# 默认为 false，因为房间可能因非审核相关
+# 的原因而被禁止，并且此操作会执行完整的用户停用。
+#
+#auto_deactivate_banned_room_attempts = false
+
+# RocksDB 日志级别。这与 tuwunel 的日志级别不同。这是
+# RocksDB 引擎/库的日志级别，它们会以 `LOG` 文件的形式出现在您的
+# 数据库文件夹/路径中。tuwunel 将正常记录 RocksDB 错误
+#（通过跟踪），如果严重，则会为了安全而引发 panic。
+#
+#rocksdb_log_level = "error"
+
+# 此项未记录。请贡献其文档。
+#
+#rocksdb_log_stderr = false
+
+# RocksDB `LOG` 文件在以字节为单位旋转之前的最大大小。
+# 默认为 4MB。
+#
+#rocksdb_max_log_file_size = 4194304
+
+# RocksDB 强制旋转日志之前的时间（以秒为单位）。
+#
+#rocksdb_log_time_to_roll = 0
+
+# 将此设置为 true，以使用 RocksDB 针对 HDD（较慢的设备存储）量身定制的配置选项。
+#
+# 值得注意的是，默认情况下，tuwunel 将使用启用 Direct IO 的 RocksDB。
+# *通常*来说，这可以提高性能，因为它绕过了缓冲 I/O（系统页面缓存）。
+# 但是，如果您的设置不常见，Direct IO 可能会导致数据库操作出现问题。
+# 在 FUSE 文件系统以及可能的 ZFS 文件系统中观察到过这种情况。
+# RocksDB 通常会处理/纠正这些问题，但它不能解决所有设置的问题。
+# 如果您遇到任何奇怪的 RocksDB 问题，请尝试启用此选项，因为它会关闭 Direct IO，
+# 并且如果此选项修复了您的数据库问题，请随时在 tuwunel Matrix 房间中报告。
+#
+# 更多信息，请参阅：
+# https://github.com/facebook/rocksdb/wiki/Direct-IO
+#
+#rocksdb_optimize_for_spinning_disks = false
+
+# 启用 direct-io 以通过非缓冲 I/O 提高数据库性能。
+#
+# 有关 direct I/O 和 RockDB 的更多详细信息，请参阅：
+# https://github.com/facebook/rocksdb/wiki/Direct-IO
+#
+# 如果数据库驻留在不支持 direct-io 的文件系统（如 FUSE）或任何形式的复杂文件系统设置（例如可能的 ZFS）上，则将此选项设置为 false。
+#
+#rocksdb_direct_io = true
+
+# RocksDB 将用于数据库操作（例如清理、同步、刷新、压缩等）并行性的线程数。
+# 设置为 0 可使用所有逻辑线程。默认为您的 CPU 逻辑线程数。
+#
+#rocksdb_parallelism_threads = varies by system
+
+# RocksDB 将保留的最大 LOG 文件数。此项*不得*设置为 0。
+# 必须至少为 1。默认为 3，因为除非进行故障排除/调试 RocksDB 错误，否则这些文件不是很有用。
+#
+#rocksdb_max_log_files = 3
+
+# 要使用的 RocksDB 数据库压缩类型。
+#
+# 可用选项有 "zstd"、"bz2"、"lz4" 或 "none"。
+#
+# 最好使用 ZSTD，因为它在速度/性能、存储、IO 放大和 CPU 使用率之间取得了全面的良好平衡。
+# 要获得更高的性能但压缩率较低（使用更多存储）和更少的 CPU 使用率，请使用 LZ4。
+#
+# 更多详细信息，请参阅：
+# https://github.com/facebook/rocksdb/wiki/Compression
+#
+# "none" 将禁用压缩。
+#
+#rocksdb_compression_algo = "zstd"
+
+# RocksDB 要使用的指定压缩算法的压缩级别。
+#
+# 默认值为 32767，RocksDB 内部将其读取为默认幻数，
+# 并转换为库的默认压缩级别，因为它们各不相同。
+# 请参阅它们的 `kDefaultCompressionLevel`。
+#
+# 请注意，使用默认值时，我们可能会用专门为 tuwunel
+# 量身定制的设置覆盖它。
+#
+#rocksdb_compression_level = 32767
+
+# RocksDB 要用于最底层/数据的指定压缩算法的压缩级别。
+# 默认值为 32767，RocksDB 内部将其读取为默认幻数，
+# 并转换为库的默认压缩级别，因为它们各不相同。
+# 请参阅它们的 `kDefaultCompressionLevel`。
+#
+# 由于这是最底层（通常是旧的且使用最少的数据），
+# 可能需要在此处设置非常高的压缩级别，因为此数据
+# 被使用的可能性较小。请研究您选择的压缩算法。
+#
+# 请注意，使用默认值时，我们可能会用专门为 tuwunel
+# 量身定制的设置覆盖它。
+#
+#rocksdb_bottommost_compression_level = 32767
+
+# 是否启用 RocksDB 的 "bottommost_compression"。
+#
+# 以牺牲更多 CPU 使用率为代价，这将进一步压缩
+# 数据库以减少更多存储空间。建议使用 ZSTD
+# 压缩以获得最佳压缩结果。如果您正在尝试减少
+# 数据库的存储使用量，此项可能很有用。
+#
+# 更多详细信息，请参阅 https://github.com/facebook/rocksdb/wiki/Compression。
+#
+#rocksdb_bottommost_compression = true
+
+# 数据库恢复模式（用于 RocksDB WAL 损坏）。
+#
+# 当服务器报告损坏并拒绝启动时，请使用此选项。
+# 设置模式 2 (PointInTime) 可从此损坏中干净地恢复。
+# 服务器将从上次的良好状态继续运行，该状态在崩溃前几秒或几分钟。
+# 客户端可能需要运行“清除缓存并重新加载”以应对回滚。
+# 成功后，您可以将模式重置回默认值并再次重新启动。
+# 请注意，在某些情况下，在 PointInTime 模式下运行至少 30 分钟后，损坏错误可能才会清除。
+#
+# 作为最后的手段，如果 PointInTime 无法修复或解决任何问题，
+# 您可以尝试模式 3 (SkipAnyCorruptedRecord)，但这会使服务器
+# 处于潜在不一致的状态。
+#
+# 默认模式 1 (TolerateCorruptedTailRecords) 将在关闭期间自动
+# 删除数据库中损坏的最后一个条目，但仅此而已。
+# 客户端失去同步的可能性极小。要禁用任何形式的静默回滚，请设置模式 0
+# (AbsoluteConsistency)。
+#
+# 选项包括：
+# 0 = AbsoluteConsistency（绝对一致性）
+# 1 = TolerateCorruptedTailRecords（容忍损坏的尾部记录，默认）
+# 2 = PointInTime（时间点恢复，如果尝试恢复，请使用此项）
+# 3 = SkipAnyCorruptedRecord（跳过任何损坏的记录，您现在放弃了 tuwunel 保修）
+#
+# 有关这些模式的更多信息，请参阅：
+# https://github.com/facebook/rocksdb/wiki/WAL-Recovery-Modes
+#
+# 有关恢复损坏数据库的更多详细信息，请参阅：
+# https://tuwunel.chat/troubleshooting.html#database-corruption
+#
+#rocksdb_recovery_mode = 1
+
+# 启用或禁用 RocksDB 的“偏执型 SST 文件检查”。由于运行了进一步的安全检查，
+# 这可以提高 RocksDB 数据库的一致性，但可能会影响性能。
+#
+# 更多信息，请参阅：
+# https://github.com/facebook/rocksdb/wiki/Online-Verification#columnfamilyoptionsparanoid_file_checks
+#
+#rocksdb_paranoid_file_checks = false
+
+# 在运行时启用或禁用 RocksDB 中的校验和验证。
+# 校验和通常通过硬件加速，开销较低；它们在 RocksDB 中默认启用。
+# 较旧或较慢的平台可能会从禁用中获得收益。
+#
+#rocksdb_checksums = true
+
+# 启用 RocksDB 中的“原子刷新”模式。此选项不供用户使用。
+# 它可能会在未来的版本中被删除或忽略。偏执者可以启用原子刷新，以
+# 可能会提高数据库完整性，但会牺牲性能。
+#
+#rocksdb_atomic_flush = false
+
+# 数据库修复模式（用于 RocksDB SST 损坏）。
+#
+# 当服务器在运行时报告损坏或发生 panic 时，请使用此选项。
+# 如果服务器拒绝启动，请首先使用恢复模式选项。
+# 启动后发生的包含缩写词 'SST' 的损坏错误可能需要此选项。
+#
+# - 建议在运行修复之前备份您的数据库目录。
+#
+# - 建议在运行修复后禁用修复模式并重新启动服务器。
+#
+# 有关恢复损坏数据库的更多详细信息，请参阅 https://tuwunel.chat/troubleshooting.html#database-corruption。
+#
+#rocksdb_repair = false
+
+# 此项未记录。请贡献其文档。
+#
+#rocksdb_read_only = false
+
+# 此项未记录。请贡献其文档。
+#
+#rocksdb_secondary = false
+
+# 为压缩线程启用空闲 CPU 优先级。默认情况下不启用此项，以防止
+# 压缩在繁忙系统上落后太多。
+#
+#rocksdb_compaction_prio_idle = false
+
+# 为压缩线程启用空闲 IO 优先级。这可以防止服务器操作中出现任何意外延迟，通常是一个好主意。默认启用。
+#
+#rocksdb_compaction_ioprio_idle = true
+
+# 启用 RocksDB 压缩。您*永远不*应该将此选项设置为 false。
+# 如果您出于某种原因发现自己需要使用此选项作为故障排除或 bug 的一部分，
+# 请在 tuwunel Matrix 房间中联系我们，并提供信息和详细信息。
+#
+# 禁用压缩将导致数据库显著膨胀和爆炸性增长，性能逐渐变差，不必要的
+# 过度磁盘读/写，以及更慢的关闭和启动。
+#
+#rocksdb_compaction = true
+
+# 统计信息收集级别。某些用于显示数据库
+# 统计信息的管理命令可能需要设置此选项。
+# 较高的设置可能会影响数据库性能。
+#
+# 选项是一个介于 0 到 6 之间的数字：
+# 0 = 无统计信息。
+# 1 = 发布模式下无统计信息 (默认)。
+# 2 到 3 = 无性能影响的统计信息。
+# 3 到 5 = 可能有性能影响的统计信息。
+# 6 = 所有统计信息。
+#
+#rocksdb_stats_level = 1
+
+# 清除在当前 schema 中不再可访问的数据。开发人员
+# 期望将其设置为 true，这简化了 schema 并防止了
+# 旧 schema 永远在代码库中积累。如果将其设置为 false，
+# 则将忽略当前 schema 中未描述的旧列，而不是清除它们，从而泄漏其空间。
+#
+# 在以不推荐或禁止的方式在版本之间移动时，或者出于诊断和开发目的，可以将其设置为 false；
+# 需要在此类移动中保留。
+#
+#rocksdb_drop_missing_columns = true
+
+# 这是一个可以配置的密码，它将允许您登录
+# 服务器机器人帐户（当前为 `@conduit`），用于紧急故障排除目的，
+# 例如恢复/重新创建您的管理员房间，或邀请自己回来。
+#
+# 有关重新进入管理员房间的其他方法，请参阅 https://tuwunel.chat/troubleshooting.html#lost-access-to-admin-room。
+#
+# 一旦取消设置此密码，所有会话将出于安全目的而注销。
+#
+# 示例: "F670$2CP@Hw8mG7RY1$%!#Ic7YA"
+#
+#emergency_password =
+
+# 此项未记录。请贡献其文档。
+#
+#notification_push_path = "/_matrix/push/v1/notify"
+
+# 允许本地（仅您的服务器）存在更新/请求。
+#
+# 请注意，tuwunel 上的存在速度非常快，不像 Synapse。
+# 如果使用传出存在，则*必须*启用此项。
+#
+#allow_local_presence = true
+
+# 允许传入的联邦存在更新/请求。
+#
+# 此选项接收来自其他服务器的存在更新，但除非 `allow_outgoing_presence` 为 true，否则不会发送任何更新。
+# 请注意，tuwunel 上的存在速度非常快，不像 Synapse。
+#
+#allow_incoming_presence = true
+
+# 允许传出存在更新/请求。
+#
+# 此选项向其他服务器发送存在更新，但除非 `allow_incoming_presence` 为 true，否则不会接收任何更新。
+# 请注意，tuwunel 上的存在速度非常快，不像 Synapse。
+# 如果使用传出存在，您*必须*也启用 `allow_local_presence`。
+#
+#allow_outgoing_presence = true
+
+# 在没有存在更新的情况下，您将闲置多少秒。
+# 默认为 5 分钟。
+#
+#presence_idle_timeout_s = 300
+
+# 在没有存在更新的情况下，您将离线多少秒。
+# 默认为 30 分钟。
+#
+#presence_offline_timeout_s = 1800
+
+# 为远程用户启用存在闲置计时器。
+#
+# 禁用此项作为对参与许多大型房间或资源有限的服务器的优化。
+# 禁用它可能会导致某些远程用户看到不正确的存在状态（即，卡在线上）。
+#
+#presence_timeout_remote_users = true
+
+# 禁止向标记为活跃的用户发送推送通知。（实验性）
+#
+# 启用后，具有 `Online` 状态和最近活动（基于存在状态和同步活动）的用户
+# 将不会收到推送通知，从而在他们
+# 活跃于另一个客户端时减少重复警报。
+#
+# 默认禁用，以保留传统行为。
+#
+#suppress_push_when_active = false
+
+# 允许接收来自远程服务器的传入已读回执。
+#
+#allow_incoming_read_receipts = true
+
+# 允许向远程服务器发送已读回执。
+#
+#allow_outgoing_read_receipts = true
+
+# 允许向联邦发送传出输入状态更新。
+#
+#allow_outgoing_typing = true
+
+# 允许从联邦接收传入输入状态更新。
+#
+#allow_incoming_typing = true
+
+# 联邦用户可以指示输入状态的最长时间。
+#
+#typing_federation_timeout_s = 30
+
+# 本地客户端可以指示输入状态的最短时间。这不会覆盖
+# 客户端停止输入的请求。它只在没有停止请求时强制执行一个最小值。
+#
+#typing_client_timeout_min_s = 15
+
+# 本地客户端可以指示输入状态的最长时间。
+#
+#typing_client_timeout_max_s = 45
+
+# 将此设置为 true，以让 tuwunel 使用 zstd 压缩 HTTP 响应正文。
+# 如果 tuwunel 未使用 `zstd_compression` 功能构建，则此选项无效。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS。
+# 大多数用户不应需要启用此项。
+# 在决定启用此项之前，请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+#zstd_compression = false
+
+# 将此设置为 true，以让 tuwunel 使用 gzip 压缩 HTTP 响应正文。
+# 如果 tuwunel 未使用 `gzip_compression` 功能构建，则此选项无效。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS。
+# 大多数用户不应需要启用此项。
+# 在决定启用此项之前，请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+# 如果您在大量房间中，您可能会发现启用此项是必要的，
+# 以减少显著庞大的响应正文。
+#
+#gzip_compression = false
+
+# 将此设置为 true，以让 tuwunel 使用 brotli 压缩 HTTP 响应正文。
+# 如果 tuwunel 未使用 `brotli_compression` 功能构建，则此选项无效。
+# 请注意，启用 HTTP 压缩可能会削弱 TLS。
+# 大多数用户不应需要启用此项。
+# 在决定启用此项之前，请参阅 https://breachattack.com/ 和 https://wikipedia.org/wiki/BREACH。
+#
+#brotli_compression = false
+
+# 设置为 true 以允许用户类型 "guest" 注册。一些客户端（如 Element）会尝试自动注册访客用户。
+#
+#allow_guest_registration = false
+
+# 设置为 true 以在管理员房间中记录访客注册。请注意，如果您是公共 homeserver，这些可能很嘈杂或不必要。
+#
+#log_guest_registrations = false
+
+# 设置为 true 以允许访客注册/用户自动加入 `auto_join_rooms` 中指定的任何房间。
+#
+#allow_guests_auto_join_rooms = false
+
+# 启用传统的未经身份验证的 Matrix 媒体存储库端点。
+# 这些端点包括：
+# - /_matrix/media/*/config
+# - /_matrix/media/*/upload
+# - /_matrix/media/*/preview_url
+# - /_matrix/media/*/download/*
+# - /_matrix/media/*/thumbnail/*
+#
+# 相应的经过身份验证的端点始终启用。
+#
+# 默认为 false。
+#
+#allow_legacy_media = false
+
+# 回退到从远程服务器请求传统的未经身份验证的媒体。
+# 未经身份验证的媒体在 ~2024 年第 3 季度被移除；启用此项会增加
+# 大量的联邦请求，这些请求不太可能成功。
+#
+#request_legacy_media = false
+
+# 此项未记录。请贡献其文档。
+#
+#freeze_legacy_media = true
+
+# 在启动时检查媒体目录的一致性：
+# 1. 当 `media_compat_file_link` 启用时，此检查将在 Conduit 和 tuwunel 之间来回切换时升级媒体。
+#    必须同时启用这两个选项才能处理此问题。
+# 2. 从目录中删除媒体时，此检查也会删除其数据库条目。
+#
+# 如果这些检查都不适用于您的用例，并且您的媒体
+# 目录非常大，将其设置为 false 可能会减少启动时间。
+#
+#media_startup_check = true
+
+# 通过创建媒体的符号链接，启用与 Conduit 媒体目录的向后兼容性。
+#
+# 仅当您计划再次使用 Conduit 时，才需要此选项。
+# 否则，将其设置为 false 可减少文件系统混乱以及管理
+# 目录中这些符号链接的开销。此项现在默认禁用。
+# 您仍然可以返回上游 Conduit，但您必须至少运行
+# 一次 tuwunel 并将其设置为 true，并允许
+# media_startup_check 在关闭以返回 Conduit 之前进行。
+#
+#media_compat_file_link = false
+
+# 作为媒体启动检查的一部分，从数据库中清除丢失的媒体。
+#
+# 这意味着如果您从媒体目录中删除文件，则
+# 数据库中的相应条目也将被删除。此项默认禁用，因为如果媒体目录被意外移动
+# 或无法访问，数据库中的元数据条目将遗憾地丢失。
+#
+#prune_missing_media = false
+
+# tuwunel 将拒绝从其下载远程媒体的服务器名称的正则表达式模式向量列表。
+#
+# 示例: ["badserver\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#prevent_media_downloads_from = []
+
+# 被禁止的服务器名称的正则表达式模式列表，我们将阻止传入*和*传出联邦，并阻止客户端房间加入 / 远程用户邀请。
+#
+# 此检查应用于房间 ID、房间别名、发送者服务器名称、
+# 发送者用户的服务器名称、传入联邦 X-Matrix 源以及
+# 传出联邦处理程序。
+#
+# 基本上是“全局” ACL。
+#
+# 示例: ["badserver\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#forbidden_remote_server_names = []
+
+# 被禁止的服务器名称的正则表达式模式列表，我们将阻止所有
+# 传出联邦房间目录请求。可用于防止
+# 我们的用户误入不良服务器或空间。
+#
+# 示例: ["badserver\.tld$", "badphrase", "19dollarfortnitecards"]
+#
+#forbidden_remote_room_directory_server_names = []
+
+# IPv4 和 IPv6 CIDR 范围/子网的向量列表（用引号括起来），您不希望 tuwunel 向其发送传出请求。
+# 默认为 RFC1918、不可路由、回环、多播和测试网地址，以确保安全。
+#
+# 请注意，这*不能*保证安全。您应该使用带区域的防火墙，
+# 因为在应用程序层执行此操作可能会被绕过。
+#
+# 目前，此项不考虑正在使用的代理，不像 Synapse。
+#
+# 要禁用，请将其设置为空向量 (`[]`)。
+#
+# 默认值:
+# ["127.0.0.0/8", "10.0.0.0/8", "172.16.0.0/12",
+# "192.168.0.0/16", "100.64.0.0/10", "192.0.0.0/24", "169.254.0.0/16",
+# "192.88.99.0/24", "198.18.0.0/15", "192.0.2.0/24", "198.51.100.0/24",
+# "203.0.113.0/24", "224.0.0.0/4", "::1/128", "fe80::/10", "fc00::/7",
+# "2001:db8::/32", "ff00::/8", "fec0::/10"]
+#
+#ip_range_denylist =
+
+# 可选的 IP 地址或网络接口名称，用于绑定作为 URL 预览请求的来源。
+# 如果未设置，则不会绑定到特定的地址或接口。
+#
+# 接口名称仅在 Linux、Android 和 Fuchsia 平台上支持；
+# 所有其他平台都可以指定 IP 地址。要列出系统上的接口，请使用命令 `ip link show`。
+#
+# 示例: `"eth0"` 或 `"1.2.3.4"`
+#
+#url_preview_bound_interface =
+
+# 允许发送请求以进行 URL 预览的域的向量列表。
+#
+# 这是一个*包含*匹配，而不是明确匹配。
+# 输入 "google.com" 将匹配 "https://google.com" 和
+# "http://mymaliciousdomainexamplegoogle.com" 将此设置为 "*" 将允许所有 URL 预览。
+# 请注意，这会为您的服务器带来巨大的攻击面，您应该
+# 意识到这样做的风险。
+#
+#url_preview_domain_contains_allowlist = []
+
+# 允许发送请求以进行 URL 预览的明确域的向量列表。
+#
+# 这是一个*明确*匹配，而不是包含匹配。
+# 输入 "google.com" 将匹配 "https://google.com"、"http://google.com"，但不会匹配
+# "https://mymaliciousdomainexamplegoogle.com"。将此设置为 "*" 将允许所有 URL 预览。
+# 请注意，这会为您的服务器带来巨大的攻击面，您应该
+# 意识到这样做的风险。
+#
+#url_preview_domain_explicit_allowlist = []
+
+# 不允许发送请求以进行 URL 预览的明确域的向量列表。
+#
+# 这是一个*明确*匹配，而不是包含匹配。
+# 输入 "google.com" 将匹配 "https://google.com"、"http://google.com"，但不会匹配
+# "https://mymaliciousdomainexamplegoogle.com"。拒绝列表在允许列表之前检查。
+# 将此设置为 "*" 将不起作用。
+#
+#url_preview_domain_explicit_denylist = []
+
+# 允许发送请求以进行 URL 预览的 URL 的向量列表。
+#
+# 请注意，这是一个*包含*匹配，而不是明确匹配。
+# 输入 "google.com" 将匹配 "https://google.com/"、
+# "https://google.com/url?q=https://mymaliciousdomainexample.com" 和
+# "https://mymaliciousdomainexample.com/hi/google.com" 将此设置为 "*" 将允许所有 URL 预览。
+# 请注意，这会为您的服务器带来巨大的攻击面，您应该
+# 意识到这样做的风险。
+#
+#url_preview_url_contains_allowlist = []
+
+# 抓取时允许 URL 预览正文大小的最大字节数。
+# 默认为 256KB。
+#
+#url_preview_max_spider_size = 256000
+
+# 选项，用于决定您是否希望在根域上运行域允许列表检查（包含和明确）。不适用于 URL 包含允许列表。默认为 false。
+#
+# 示例用例：如果启用此项并且您在明确和/或包含域允许列表中允许了 "wikipedia.org"，
+# 它将允许 "wikipedia.org" 下的所有子域，例如 "en.m.wikipedia.org"，因为会检查并匹配根域。
+# 如果域包含允许列表对您来说仍然过于宽泛，但您仍想允许根域下的所有子域，则此项很有用。
+#
+#url_preview_check_root_domain = false
+
+# 被禁止的房间别名和房间 ID 的字符串正则表达式模式列表。
+#
+# 可以使用正则表达式，也可以通过只指定单词来进行明确的包含匹配（请参阅示例）。
+#
+# 此项在房间别名创建、自定义房间 ID 创建（如果使用）时进行检查，
+# 并在启动时作为警告，如果您的数据库中的任何房间别名具有被禁止的房间别名/ID。
+#
+# 示例: ["19dollarfortnitecards", "b[4a]droom", "badphrase"]
+#
+#forbidden_alias_names = []
+
+# 被禁止的用户名模式/字符串列表。
+#
+# 可以使用正则表达式，也可以通过只指定单词来进行明确的包含匹配（请参阅示例）。
+#
+# 此项在用户名可用性检查、注册时进行检查，
+# 并在启动时作为警告，如果您的数据库中的任何本地用户具有被禁止的用户名。
+#
+# 示例: ["administrator", "b[a4]dusernam[3e]", "badphrase"]
+#
+#forbidden_usernames = []
+
+# 要延迟加入的服务器名称列表。
+#
+# 如果客户端通过这些服务器之一请求加入，
+# 它们将在最后尝试。
+#
+# 有助于防止由于来自某个 homeserver 的超时而导致的加入失败。
+#
+#deprioritize_joins_through_servers = ["matrix\.org"]
+
+# 在启动时立即重试失败和不完整的远程服务器消息。
+# 这称为突发。如果禁用此项，则这些消息可能
+# 不会发送，直到有更多消息排队到该服务器。
+# 除非服务器资源极其有限或服务器的部署规模巨大，否则请勿更改此选项。
+# 除非您知道自己在做什么，否则请勿禁用此项。
+#
+#startup_netburst = true
+
+# 消息被丢弃且不再重试。 `startup_netburst` 选项
+# 必须启用才能使此值生效。除非您知道自己在做什么，否则请勿更改此值。
+# 将此值设置为 -1 可重试每条消息而不修剪队列；这可能会消耗
+# 大量磁盘空间。将此值设置为 0 可丢弃所有消息，而不尝试重新投递。
+#
+#startup_netburst_keep = 50
+
+# 阻止非管理员本地用户发送房间邀请（本地和远程），
+# 并阻止非管理员用户接收远程房间邀请。
+#
+# 始终允许管理员发送和接收所有房间邀请。
+#
+#block_non_admin_invites = false
+
+# 允许管理员在“#admins”（管理员房间）之外的房间中输入命令，
+# 方法是在您的消息前加上 “\!admin” 或 “\\!admin”，
+# 后跟一个正常的 tuwunel 管理员命令。
+# 回复将对房间公开可见，源自发送者。
+#
+# 示例: \\!admin debug ping puppygock.gay
+#
+#admin_escape_commands = true
+
+# 在启动时自动激活 tuwunel 管理员房间控制台/CLI。
+# 此选项也可以通过 `--console` tuwunel 参数启用。
+#
+#admin_console_automatic = false
+
+# 在启动时执行的管理员命令列表。
+#
+# 此选项也可以通过 `--execute` tuwunel 参数配置，
+# 并且可以接受标准 shell 命令和环境变量。
+#
+# 示例: `./tuwunel --execute "server admin-notice tuwunel has
+# started up at $(date)"`
+#
+# 示例: admin_execute = ["debug ping puppygock.gay", "debug echo hi"]`
+#
+#admin_execute = []
+
+# 忽略启动命令中的错误。
+#
+# 如果为 false，如果管理员执行命令（`--execute` / `admin_execute`）失败，
+# tuwunel 将报错并启动失败。
+#
+#admin_execute_errors_ignore = false
+
+# 在 SIGUSR2 上执行的管理员命令列表。
+#
+# 与 admin_execute 类似，但这些命令在服务器在支持的平台上接收到 SIGUSR2 时执行。
+#
+#admin_signal_execute = []
+
+# 控制管理员命令日志捕获（运行管理员命令生成的日志）的最大日志级别。
+# 在发布版本中默认为 "info"，否则在调试版本中默认为 "debug"。
+#
+#admin_log_capture = "info"
+
+# 应用于管理员房间的默认房间标签。
+#
+# 在像 Element 这样的某些客户端上，房间标签 "m.server_notice" 是一个
+# 特殊的固定房间，位于您的房间列表的最底部。
+# tuwunel 管理员房间可以固定在此处，以便您始终拥有一个
+# 专用于您的管理员房间的易于访问的快捷方式。
+#
+#admin_room_tag = "m.server_notice"
+
+# 是否通过将第一个注册用户加入管理员房间来授予其管理员权限。
+# 请注意，从技术上讲，在管理员房间为空（或只包含服务器用户）时，下一个注册用户
+# 将被授予权限，并且仅在启用管理员房间时。
+#
+#grant_admin_to_first_user = true
+
+# 管理员房间是否在首次启动时创建。用户不应将其设置为 false。
+# 开发人员可以在集成测试期间将其设置为 false，以减少活动和输出。
+#
+#create_admin_room = true
+
+# 是否在管理员房间上启用联邦。在创建管理员房间后，此项无法更改。
+#
+#federate_admin_room = true
+
+# Sentry.io 崩溃/panic 报告、性能监控/指标等。
+# 默认情况下*不*启用此项。tuwunel 的默认 Sentry 报告
+# 端点域是 `o4509498990067712.ingest.us.sentry.io`。
+#
+#sentry = false
+
+# 如果需要自定义 URL，则为 Sentry 报告 URL。
+#
+#sentry_endpoint = ""
+
+# 在 Sentry.io 崩溃报告和指标中报告您的 tuwunel server_name。
+#
+#sentry_send_server_name = false
+
+# Sentry.io 的性能监控/跟踪采样率。
+#
+# 请注意，过高的值可能会影响性能，可以通过
+# 设置为 0.0 (0%) 来禁用。此值被读取为 Sentry 的百分比，
+# 表示为小数。默认为 15% 的跟踪 (0.15)。
+#
+#sentry_traces_sample_rate = 0.15
+
+# 是否将堆栈跟踪附加到 Sentry 报告。
+#
+#sentry_attach_stacktrace = false
+
+# 将 panic 发送到 Sentry。此项默认设置为 true，但必须启用 Sentry。
+# 必须启用全局 `sentry` 配置选项才能发送任何数据。
+#
+#sentry_send_panic = true
+
+# 将错误发送到 sentry。此项默认设置为 true，但必须启用 sentry。
+# 此选项仅在发布模式下有效；在调试模式下强制为 false。
+#
+#sentry_send_error = true
+
+# 控制 Sentry 发送面包屑和事务等内容的跟踪日志级别。
+#
+#sentry_filter = "info"
+
+# 启用 tokio-console。此选项仅与开发人员相关。
+#
+# 更多信息，请参阅：
+# https://tuwunel.chat/development.html#debugging-with-tokio-console
+#
+#tokio_console = false
+
+# 用于集成测试的任意参数向量。服务器中的功能会根据集成测试
+# 的要求进行更改或告知。
+# - "smoke" 在启动管理员命令后执行关闭，而不是挂起
+#   客户端处理。
+#
+#test = []
+
+# 控制是否将管理员房间通知（如帐户注册、密码更改、
+# 帐户停用、房间目录发布等）发送到管理员房间。
+# 更新通知和正常的管理员命令响应仍将发送。
+#
+#admin_room_notices = true
+
+# 启用数据库池亲和性支持。在支持的系统上，
+# 检测到块设备队列拓扑，并为硬件优化请求池；
+# db_pool_workers 是自动确定的。
+#
+#db_pool_affinity = true
+
+# 设置数据库前端池中的工作线程数。
+# 此数字应反映系统的 I/O 能力，
+# 例如队列深度或同时进行的请求数。
+# 默认为 32 或 CPU 核心数的四倍（以较大者为准）。
+#
+# 注意：仅当 db_pool_affinity 禁用或系统未检测到时，才使用此值，
+# 否则它将自动确定。
+#
+#db_pool_workers = 32
+
+# 当 db_pool_affinity 启用并检测到时，任何工作组的大小
+# 将不超过确定的值。当
+# 线程池方法无法扩展到高端硬件的全部功能时，
+# 这是必需的；无限制地使用检测到的值可能会降低性能。
+#
+# 该值乘以共享设备队列的核心数，
+# 因为组工作程序可以在这些核心中的任何一个上进行调度。
+#
+#db_pool_workers_limit = 64
+
+# 确定馈送数据库前端池的队列大小。
+# 队列的大小是通过将此值乘以池工作程序数来确定的。
+# 当此队列已满时，执行请求的 tokio 任务将让出，直到有可用空间；
+# 这对于通过避免缓冲区膨胀进行流量控制很有用，
+# 但如果过低，可能会抑制吞吐量。
+#
+#db_pool_queue_mult = 4
+
+# 设置流并发的初始值。此值仅允许覆盖代码中的默认值。
+# 默认值为 32，与代码中的默认值相同。请注意，
+# 此值本身会被计算出的 stream_width_scale 覆盖，除非禁用该选项；
+# 此值可以作为固定的宽度。
+#
+#stream_width_default = 32
+
+# 从为特定系统检测到的基值开始缩放流宽度。
+# 基值是根据硬件队列大小确定的数据库池工作程序数
+# （例如，SSD 为 32，NVMe 为 64 或 128+）。此浮点数允许通过乘以它来
+# 向上或向下缩放宽度（例如 1.5、2.0 等）。最大结果可以是池
+# 队列的大小（请参阅：db_pool_queue_mult），因为任何更大的值都会使 tokio
+# 任务停顿。该值也可以缩小（例如 0.5），以牺牲每个用户的吞吐量为代价
+# 提高许多用户的响应能力。
+#
+# 将此值设置为 0.0 会导致流宽度固定为 stream_width_default
+# 的值。默认比例为 1.0，以匹配为系统检测到的能力。
+#
+#stream_width_scale = 1.0
+
+# 设置初始放大因子。此项控制每个池工作程序发出的请求的批量大小，
+# 从而增加每个流的吞吐量。此值与特定硬件
+# 特征有些抽象，可能比任何线程数或队列大小都大得多。
+# 这是因为每个数据库查询可能需要进行多次索引查找，
+# 因此批量中的许多数据库查询可能会独立进行，同时还共享可能或可能未被缓存的索引和数据块。
+# 提交巨大的批量是值得的，以减少复杂性。最大值为 32768，
+# 尽管仍建议为此配置足够的硬件。
+#
+#stream_amplification = 1024
+
+# 发送者任务工作程序数；确定发送者并行性。默认值为
+# '0'，这意味着该值在内部确定，可能匹配 tokio
+# 工作线程数或核心数等。通过设置非零值进行覆盖。
+#
+#sender_workers = 0
+
+# 启用侦听器套接字；可以设置为 false 以禁用侦听。此
+# 选项仅用于开发人员/诊断目的。
+#
+#listening = true
+
+# 在支持的平台上，当服务器接收到 SIGUSR1 时，启用配置重新加载。
+#
+#config_reload_signal = true
+
+# 将状态重置安全修补程序向后移植到所有房间版本。
+#
+# 此选项将项目 Hydra 期间开发的 State Resolution 2.1 缓解措施
+# 应用于所有先前的 State Resolution 2.0 房间版本（此服务器支持的所有房间版本）。
+# 这些缓解措施增加了对状态重置的恢复能力，而无需任何新的正确性定义；
+# 因此，将此项设置为 true 对现有房间来说是安全的。
+#
+# 此外，状态重置攻击并不一致，因为它们会导致房间没有单一的共识，
+# 因此，没有必要将其设置为 false 以匹配其他设置为 false 或只是
+# 缺乏支持的服务器；即使以某种方式需要复制其他服务器所遭受的重置后状态。
+#
+# 此选项存在是为了开发人员和调试使用，以及作为硬编码它的故障保护。
+#
+# 由于在进行实际测试以解决任何实现问题之前，
+# 此项目前默认为 false，以免危及现有房间，
+# 但否则将在下一个点版本或补丁中默认为 true。
+#
+#hydra_backports = true
+
+# 当此服务器上的最后一个用户离开时删除房间。此功能是
+# 实验性的，为了避免意外，默认情况下不启用，但可以为有兴趣节省空间的部署启用。
+# 它最终可能会在未来的版本中默认为 true。
+#
+# 请注意，并非所有可以删除最后一个本地用户的路径
+# 当前都会调用此操作，因此在某些情况下，您可能会发现房间
+# 仍然存在。
+#
+#delete_rooms_after_leave = false
+
+# 限制每个设备的一次性密钥 (One Time Keys, OTK) 数量（而不是每个算法）。
+# 参考实现随时维护 50 个 OTK，因此我们的默认值至少是其五倍。
+# 管理员没有已知原因需要调整此值；
+# 提供此值而不是硬编码。
+#
+#one_time_key_limit = 256
+
+#[global.tls]
+
+# 有效 TLS 证书文件的路径。
+#
+# 示例: "/path/to/my/certificate.crt"
+#
+#certs =
+
+# 有效 TLS 证书私钥的路径。
+#
+# 示例: "/path/to/my/certificate.key"
+#
+#key =
+
+# 是否监听并允许 HTTP 和 HTTPS 连接（不安全！）
+#
+#dual_protocol = false
+
+#[global.well_known]
+
+# 客户端 well-known 文件将服务的服务器 URL。这不应
+# 包含端口，并且应该只是一个有效的 HTTPS URL。
+#
+# 示例: "https://matrix.example.com"
+#
+#client =
+
+# 服务器 well-known 文件将服务的具有特定端口的服务器基本域 URL。
+# 这应该在末尾包含一个端口，并且不应是一个 URL。
+#
+# 示例: "matrix.example.com:443"
+#
+#server =
+
+# 支持网页的 URL。此项和以下各项生成
+# `/.well-known/matrix/support` 的内容。
+#
+# 示例: "https://example.com/support"
+#
+#support_page =
+
+# 支持角色的名称。
+#
+# 示例: "m.role.admin"
+#
+#support_role =
+
+# 上述支持角色的电子邮件地址。
+#
+# 示例: "admin@example.com"
+#
+#support_email =
+
+# 上述支持角色的 Matrix 用户 ID。
+#
+# 示例 "@admin:example.com"
+#
+#support_mxid =
+
+#[global.blurhashing]
+
+# blurhashing x 分量，https://blurha.sh/ 推荐 4
+#
+#components_x = 4
+
+# blurhashing y 分量，https://blurha.sh/ 推荐 3
+#
+#components_y = 3
+
+# 服务器将 blurhash 的最大原始大小，这是图像在转换为原始数据后的大小，
+# 它应该高于上传限制，但不宜过高。
+# 它越高，客户端请求 blurhash 的潜在负载就越高。默认
+# 值为 33.55MB。设置为 0 可禁用 blurhashing。
+#
+#blurhash_max_raw_size = 33554432
+
+#[global.ldap]
+
+# 是否启用 LDAP 登录。
+#
+# 示例: "true"
+#
+#enable = false
+
+# LDAP 服务器的 URI。
+#
+# 示例: "ldap://ldap.example.com:389"
+#
+#uri =
+
+# 搜索的根。
+#
+# 示例: "ou=users,dc=example,dc=org"
+#
+#base_dn =
+
+# 如果未启用匿名搜索，则为绑定 DN。
+#
+# 您可以使用变量 `{username}`，它将被输入的用户名替换。
+# 在这种情况下，用于绑定的密码将是为登录提供的密码，而不是
+# `bind_password_file` 提供的密码。请注意：如果您使用此直接绑定而不是 LDAP 搜索，
+# 自动授予管理员权限将不起作用。
+#
+# 示例: "cn=ldap-reader,dc=example,dc=org" 或
+# "cn={username},ou=users,dc=example,dc=org"
+#
+#bind_dn = ""
+
+# 系统上包含 `bind_dn` 密码的文件路径。
+#
+# 服务器必须能够访问该文件，并且该文件不能为空。
+#
+#bind_password_file = ""
+
+# 限制用户搜索的搜索过滤器。
+#
+# 您可以使用变量 `{username}`，它将被输入的用户名替换，以实现更复杂的过滤器。
+#
+# 示例: "(&(objectClass=person)(memberOf=matrix))"
+#
+#filter = "(objectClass=*)"
+
+# 用于唯一标识用户的属性。
+#
+# 示例: "uid" 或 "cn"
+#
+#uid_attribute = "uid"
+
+# 包含用户邮件的属性。
+#
+# 示例: "mail"
+#
+#mail_attribute = "mail"
+
+# 包含用户 distinguished name 的属性。
+#
+# 示例: "givenName" 或 "sn"
+#
+#name_attribute = "givenName"
+
+# 管理员用户搜索的根。
+#
+# 如果为空，则默认为 `base_dn`。
+#
+# 示例: "ou=admins,dc=example,dc=org"
+#
+#admin_base_dn =
+
+# 用于查找 tuwunel 管理员用户的 LDAP 搜索过滤器。
+#
+# 如果留空，则必须手动为每个用户配置管理员状态。
+#
+# 您可以使用变量 `{username}`，它将被输入的用户名替换，以实现更复杂的过滤器。
+#
+# 示例: "(objectClass=tuwunelAdmin)" 或 "(uid={username})"
+#
+#admin_filter =
+
+#[global.jwt]
+
+# 启用 JWT 登录
+#
+#enable = false
+
+# 验证密钥，在 Synapse 配置中也称为 'secret'。
+# 密钥的类型可以在 'format' 中配置，但默认为常见的 HMAC，
+# 它是一个纯文本共享密钥，因此您应该将此值保密。
+#
+#key =
+
+# 'key' 的格式。仅支持 HMAC、ECDSA 和 B64HMAC。
+# 二进制密钥无法粘贴到此配置中，因此 B64HMAC 是 HMAC 的替代方案，
+# 用于适当随机的密钥字符串。
+# - HMAC 是纯文本共享密钥私钥。
+# - B64HMAC 是 HMAC 的 base64 编码版本。
+# - ECDSA 是 PEM 编码的公钥。
+#
+#format = "HMAC"
+
+# 从有效声明自动创建新用户，否则即使使用真实 token，
+# 也会拒绝未知用户的访问。
+#
+#register_user = true
+
+# JWT 算法
+#
+#algorithm = "HS256"
+
+# 可选的 audience 声明列表。设置后，token 必须声明此列表中的一个或多个值。
+#
+#audience = []
+
+# 可选的 issuer 声明列表。设置后，token 必须声明此列表中的一个或多个值。
+#
+#issuer = []
+
+# 要求 token 中包含 expiration 声明。为了与 synapse 迁移兼容，此项默认为 false。
+#
+#require_exp = false
+
+# 要求 token 中包含 not-before 声明。为了与 synapse 迁移兼容，此项默认为 false。
+#
+#require_nbf = false
+
+# 验证 token 中存在时的 expiration time。是否需要它取决于 require_exp，
+# 但存在时，这可确保 token 在一段时间后不会被使用。
+#
+#validate_exp = true
+
+# 验证 token 中存在时的 not-before time。是否需要它取决于 require_nbf，
+# 但存在时，这可确保 token 在一段时间之前不会被使用。
+#
+#validate_nbf = true
+
+# 仅出于诊断/调试目的绕过验证。
+#
+#validate_signature = true
+
+#[global.appservice.<ID>]
+
+# 应用服务的 URL。
+#
+# 如果不需要流量，则可选地设置为 `null`。
+#
+#url =
+
+# 应用程序服务用于向 Homeserver 验证请求的唯一 token。
+#
+#as_token =
+
+# Homeserver 用于向应用程序服务验证请求的唯一 token。
+#
+#hs_token =
+
+# 与应用程序服务关联的用户本地部分。
+#
+#sender_localpart =
+
+# 是否对伪装用户的请求进行速率限制。
+#
+# 发送者被排除在外。
+#
+#rate_limited = false
+
+# 应用程序服务提供的外部协议（例如 IRC）。
+#
+#protocols = []
+
+# 应用程序服务是否希望接收临时数据。
+#
+#receive_ephemeral = false
+
+# 应用程序服务是否希望执行设备管理，作为 MSC4190 的一部分。
+#
+#device_management = false
+
+#[[global.appservice.<ID>.<users|rooms|aliases>]]
+
+# 此应用程序服务是否对此命名空间中的事件具有独占访问权限。
+#
+#exclusive = false
+
+# 定义此命名空间包含哪些值的正则表达式。
+#
+#regex =
