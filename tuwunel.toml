@@ -1,0 +1,27 @@
+# 基本服务器配置
+server_name = "matrix.si46.world"
+
+# 监听配置
+address = "0.0.0.0"
+port = 6167
+
+# 请求限制
+max_request_size = 20000000
+
+# 联邦
+allow_federation = true
+trusted_servers = ["matrix.org"]
+
+# 其他
+allow_check_for_updates = true
+database_path = "/var/lib/tuwunel"
+
+# 注册配置
+allow_registration = true  # 启用注册
+registration_requires_token = true  # 强制需要 token（否则公开注册）
+
+# 多 token 定义（数组，支持多个）
+[[registration_tokens]]
+token = "team-internal"  # Token 1
+uses_allowed = 20  # 最多可以注册多少人
+# expiry_time = 1735689600000  # Unix 时间戳，过期时间（可选，毫秒）
