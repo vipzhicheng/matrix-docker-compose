@@ -1,0 +1,10 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://matrix.si46.world",
+      "server_name": "matrix.si46.world"
+    }
+  },
+  "disable_custom_urls": true,
+  "brand": "Matrix @ si46.world"
+}
