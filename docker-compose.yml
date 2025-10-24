@@ -17,8 +17,10 @@ services:
       TUWUNEL_ALLOW_CHECK_FOR_UPDATES: "true"
       TUWUNEL_TRUSTED_SERVERS: '["matrix.org"]'
       TUWUNEL_ADDRESS: 0.0.0.0
+    ports:
+      - 6167:67
     expose:
-      - "6167"
+      - 6167
   element-web:
     image: vectorim/element-web:latest
     restart: unless-stopped
