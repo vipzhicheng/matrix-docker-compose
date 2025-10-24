@@ -21,8 +21,4 @@ database_path = "/var/lib/tuwunel"
 # 注册配置
 allow_registration = true  # 启用注册
 registration_requires_token = true  # 强制需要 token（否则公开注册）
-
-# 多 token 定义（数组，支持多个）
-[[registration_tokens]]
-token = "team-internal"
-uses_allowed = 20
+registration_token = "7a4234d2e408f5b43fde6c144ba2c7ea17ccc0b110957fff65a8ffc9619d68b6"
